@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.data.domain.Page;
 import se331.lab08.entity.Event;
 import se331.lab08.service.EventService;
 
@@ -20,18 +21,16 @@ public class EventController {
 
     final EventService eventService;
 
-    @GetMapping("events")
-    public ResponseEntity<?> getEventLists(@RequestParam(value = "_limit", required = false) Integer perPage
-            , @RequestParam(value = "_page", required = false) Integer page) {
-        List<Event> output = null;
-        Integer eventSize = eventService.getEventSize();
-        HttpHeaders responseHeader = new HttpHeaders();
-        responseHeader.set("x-total-count", String.valueOf(eventSize));
+    @GetMapping("/events")
+    public ResponseEntity<?> getEventLists(@RequestParam(value = "_limit", required = false) Integer perPage,
+                                           @RequestParam(value = "_page", required = false) Integer page) {
+        Page<Event> pageOutput = eventService.getEvents(perPage, page);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("x-total-count", String.valueOf(pageOutput.getTotalElements()));
         try {
-            output = eventService.getEvents(perPage, page);
-            return new ResponseEntity<>(output, responseHeader, HttpStatus.OK);
-        } catch (IndexOutOfBoundsException ex) {
-            return new ResponseEntity<>(output, responseHeader, HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok().headers(responseHeaders).body(pageOutput.getContent());
+        } catch (IndexOutOfBoundsException e) {
+            return ResponseEntity.ok().headers(responseHeaders).body(pageOutput.getContent());
         }
     }
 
