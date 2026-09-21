@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se331.lab08.entity.Event;
 import se331.lab08.repository.EventRepository;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Profile("db")
 public class EventDaoDbImpl implements EventDao {
     final EventRepository eventRepository;
 
