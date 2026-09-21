@@ -2,12 +2,14 @@ package se331.lab08.dao;
 
 import org.springframework.stereotype.Repository;
 import se331.lab08.entity.Organizer;
+import org.springframework.context.annotation.Profile;
 
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Profile("memory")
 public class OrganizerDaoImpl implements OrganizerDao {
     List<Organizer> organizerList;
 
