@@ -3,7 +3,7 @@ spring:
     name: 331-backend
   profiles:
     active:
-      - memory
+      - db
   datasource:
     url: jdbc:postgresql://localhost:5432/selabdb
     username: postgres
